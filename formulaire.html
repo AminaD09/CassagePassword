@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Formulaire de connexion</title>
+  <style>
+.container {
+  width: 300px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f1f1f1;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+h2 {
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+input[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+.alert {
+  padding: 10px;
+  margin-bottom: 15px;
+  color: #a94442;
+  background-color: #f2dede;
+  border: 1px solid #ebccd1;
+  border-radius: 4px;
+}
+  </style>
+  <script>
+    window.onload = function() {
+      document.getElementById("login").value = "fatoufg08";
+    }
+
+    function validateForm() {
+      var login = document.getElementById("login").value;
+      var password = document.getElementById("password").value;
+
+      if (login === "fatoufg08" &&  password === "passer2000") {
+        alert("Connexion réussie !");
+        return true;
+      } else {
+        alert("Login invalide ou mot de passe manquant !");
+        return false;
+      }
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h2>Connexion</h2>
+    <form onsubmit="event.preventDefault(); validateForm(); performDictionaryAttack();">
+      <div class="form-group">
+        <label for="login">Login :</label>
+        <input type="text" id="login" name="login" placeholder="Entrez votre login" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Mot de passe :</label>
+        <input type="password" id="password" name="password" placeholder="Entrez votre mot de passe">
+      </div>
+      <div class="form-group">
+        <input type="submit" id="connexionBtn" value="Se connecter">
+      </div>
+    </form>
+  </div>
+</body>
+
+<script>
+   function performDictionaryAttack() {
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+      if (xhr.status === 200) {
+        var response = JSON.parse(xhr.responseText);
+        if (response.found) {
+          alert("Mot de passe trouvé : " + response.password);
+        } else {
+          alert("Mot de passe non trouvé.");
+        }
+      } else {
+        alert("Une erreur s'est produite lors de la requête.");
+      }
+    }
+  };
+
+  xhr.open("POST", "http://localhost/dictionary_attack.php", true);
+  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  var formData = new FormData();
+    formData.append("login", login);
+    formData.append("password", password);
+    xhr.send(formData);
+}
+
+// Appel à performDictionaryAttack lorsque le bouton "Connexion" est cliqué
+document.getElementById("connexionBtn").addEventListener("click", function(event) {
+  event.preventDefault();
+  performDictionaryAttack();
+});
+
+   
+  </script>
+</html>
