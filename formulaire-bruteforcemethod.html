@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <!-- ... Autres balises et styles ... -->
+  
+  
+  
+
+
+  <title>Formulaire de connexion</title>
+  <style>
+    .container {
+      width: 300px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f1f1f1;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    input[type="submit"] {
+      width: 100%;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+
+    .alert {
+      padding: 10px;
+      margin-bottom: 15px;
+      color: #a94442;
+      background-color: #f2dede;
+      border: 1px solid #ebccd1;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Connexion</h2>
+    <form onsubmit="event.preventDefault(); validateForm();">
+      <div class="form-group">
+        <label for="login">Login :</label>
+        <input type="text" id="login" name="login" placeholder="amina" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Mot de passe :</label>
+        <input type="password" id="password" name="password" readonly>
+      </div>
+      <div class="form-group">
+        <input type="submit" id="connexionBtn" value="Se connecter">
+      </div>
+    </form>
+    <div id="message"></div> <!-- Ajout de l'élément pour afficher le message -->
+  </div>
+
+  <script>
+    function validateForm() {
+      var login = document.getElementById("login").value;
+      var password = "";
+
+      // Appeler la méthode de devinage de mot de passe
+      performPasswordAttack(login, password);
+    }
+
+    function generatePasswordCombinations(login, base, characters, length) {
+  if (length === 0) {
+    attemptLogin(login, base); // Tester la combinaison
+  } else {
+    for (var i = 0; i < characters.length; i++) {
+      var newBase = base + characters[i];
+      generatePasswordCombinations(login, newBase, characters, length - 1);
+    }
+  }
+}
+
+
+
+
+
+      function performPasswordAttack(login, password) {
+  
+    // Méthode de force brute (combinaisons de lettres minuscules)
+    var lowercaseLetters = "abcdefghijklmnopqrstuvwxyz";
+    var maxPasswordLength = 4; // Longueur maximale du mot de passe à tester
+
+    // Générer les combinaisons de mots de passe à tester
+    for (var length = 1; length <= maxPasswordLength; length++) {
+      generatePasswordCombinations(login,"", lowercaseLetters, length);
+    }
+
+    displayResult(false); // Si aucune correspondance n'est trouvée
+  }
+//}
+
+
+
+
+
+
+
+
+    
+function attemptLogin(login, password) {
+
+      // Appeler votre méthode de devinage de mot de passe ici
+      // Utilisez les méthodes de dictionnaire et de force brute
+      // pour deviner le mot de passe
+
+      // Exemple de vérification basée sur un mot de passe prédéfini
+      var passwordToGuess = "love";
+
+      if (password === passwordToGuess) {
+        displayResult(true);
+      } else {
+        displayResult(false);
+      }
+}
+    function displayResult(success) {
+      var message = success ? "Connexion réussie !" : "Tentative échouée : mot de passe incorrect.";
+
+      var messageDiv = document.getElementById("message");
+      messageDiv.textContent = message;
+      
+    
+    }
+
+
+
+  </script>
+</body>
+</html>

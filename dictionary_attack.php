@@ -1,11 +1,17 @@
 <?php
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Headers: Content-Type");
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   if (isset($_POST['password'])) {
-    $password = $_POST['password'];
+    //$password = $_POST['password'];
+    $password = "lo"; // Mot de passe prédéfini
+
 
     // Charge le dictionnaire depuis un fichier texte
-    $dictionaryPasswords = file('dictionnary.txt', FILE_IGNORE_NEW_LINES);
+    $dictionaryPasswords = file('MDP.txt');
+    $dictionaryPasswords = array_map('trim', $dictionaryPasswords);
 
     // Vérifie si le mot de passe se trouve dans le dictionnaire
     if (in_array($password, $dictionaryPasswords)) {
@@ -33,4 +39,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   header('Content-Type: application/json');
   echo json_encode($response);
 }
-?>
+?>php 

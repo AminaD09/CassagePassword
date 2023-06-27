@@ -95,35 +95,40 @@ input[type="submit"]:hover {
 </body>
 
 <script>
-   function performDictionaryAttack() {
+   
+
+   function performPasswordAttack(login, password) {
+  // Effectuer une requête HTTP POST vers le fichier PHP avec les données de connexion
   var xhr = new XMLHttpRequest();
-  xhr.onreadystatechange = function() {
+  xhr.open("POST", "./dictionnary_attack.php", true);
+  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  xhr.onreadystatechange = function () {
     if (xhr.readyState === XMLHttpRequest.DONE) {
       if (xhr.status === 200) {
+        // Analyser la réponse JSON
         var response = JSON.parse(xhr.responseText);
-        if (response.found) {
-          alert("Mot de passe trouvé : " + response.password);
-        } else {
-          alert("Mot de passe non trouvé.");
-        }
+        var success = response.found;
+        displayResult(success);
       } else {
-        alert("Une erreur s'est produite lors de la requête.");
+        // Afficher une erreur en cas d'échec de la requête
+        displayResult(false);
       }
     }
   };
-
-  xhr.open("POST", "http://localhost/dictionary_attack.php", true);
-  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-  var formData = new FormData();
-    formData.append("login", login);
-    formData.append("password", password);
-    xhr.send(formData);
+  xhr.send("password=" + password);
 }
+
+
+
+
 
 // Appel à performDictionaryAttack lorsque le bouton "Connexion" est cliqué
 document.getElementById("connexionBtn").addEventListener("click", function(event) {
   event.preventDefault();
-  performDictionaryAttack();
+  if (validateForm()) {
+        performDictionaryAttack();
+  //performDictionaryAttack();
+  }
 });
 
    

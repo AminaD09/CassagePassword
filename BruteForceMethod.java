@@ -1,28 +1,35 @@
 
 //import java.util.ArrayList;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+//import java.security.MessageDigest;
+//import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Scanner;
 public class BruteForceMethod implements PasswordGuessingMethod {
     private List<String> combinations;
-    private String hashedPassword;
+    private static final String LOGIN_URL = "http://localhost/";
+    
 
     public BruteForceMethod(List<String> combinations) {
         this.combinations = combinations;
-        //this.hashedPassword = hashedPassword;
+        //this.username = username;
     }
 
     @Override
     public boolean guessPassword(String password) {
+
+
+        
+
         for (String combination : combinations) { 
 
 
-            //String hashedCombination = hashPassword(combination);
-            //if (hashedCombination.equals(hashedPassword)) {
-                //System.out.println("le hash est" + hashedPassword);
-                //return true;
-            //}
+            String passwordAttempt = combination;
+            boolean isPasswordCorrect = this.sendLoginRequest(passwordAttempt);
 
 
             if (combination.equals(password)) {
@@ -32,32 +39,48 @@ public class BruteForceMethod implements PasswordGuessingMethod {
         return false;
     }
 
+    
 
-
-
-
-
-
-private static String hashPassword(String password) {
+    private boolean sendLoginRequest(String password) {
+        String username = "amina";
         try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] encodedHash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
-            return bytesToHex(encodedHash);
-        } catch (NoSuchAlgorithmException e) {
+            URL url = new URL(LOGIN_URL);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setDoOutput(true);
+
+            // Parameters for the request
+            String postData = "password=" + URLEncoder.encode(password, "UTF-8");
+            connection.getOutputStream().write(postData.getBytes(StandardCharsets.UTF_8));
+
+            int responseCode = connection.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                // Analyze the response from the login page to determine if the password is correct
+                // For example, you can read the response and check if it contains certain text
+                String response = readResponse(connection);
+                return response.contains("Password correct"); // Modify this condition based on the actual response
+
+            } else {
+                // Request failed
+                return false;
+            }
+
+        } catch (IOException e) {
+            // Error handling for sending the request
             e.printStackTrace();
+            return false;
         }
-        return null;
     }
 
-    private static String bytesToHex(byte[] bytes) {
-        StringBuilder hexString = new StringBuilder();
-        for (byte b : bytes) {
-            String hex = Integer.toHexString(0xFF & b);
-            if (hex.length() == 1) {
-                hexString.append('0');
-            }
-            hexString.append(hex);
+    private String readResponse(HttpURLConnection connection) throws IOException {
+        StringBuilder response = new StringBuilder();
+        Scanner scanner = new Scanner(connection.getInputStream());
+        while (scanner.hasNextLine()) {
+            response.append(scanner.nextLine());
         }
-        return hexString.toString();
+        scanner.close();
+        return response.toString();
     }
 }
+
+

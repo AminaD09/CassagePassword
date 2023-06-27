@@ -1,4 +1,8 @@
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 //import java.security.MessageDigest;
@@ -8,8 +12,11 @@ import java.util.List;
 import java.util.Scanner;
 
 public class PasswordGuessing {
+   
     public static void main(String[] args) {
-       
+
+   
+
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("Veuillez entrer le mot de passe :");
@@ -22,7 +29,7 @@ public class PasswordGuessing {
         System.out.println("Choisissez la méthode de cassage de mot de passe qui vous convient :");
         System.out.println("1. Brute Force");
         System.out.println("2. Par dictionnaire");
-        //System.out.println("3. BruteForce avec hash");
+
         int choice = scanner.nextInt();
         scanner.nextLine(); // Pour vider le tampon
 
@@ -33,14 +40,6 @@ public class PasswordGuessing {
             List<String> dictionary = loadDictionary("C:/Users/bmd-tech/Documents/DIC_1/MDP.txt");
             method = PasswordGuessingMethodFactory.createDictionaryMethod("dictionary",  dictionary, password);
                                 }
-
-
-
-        
-        
-
-
-
 
 else {
             System.out.println("Choix invalide.");
@@ -53,6 +52,14 @@ else {
                 System.out.println("Mot de passe deviné avec succès !");
 
                 System.out.println("Le mot de passe deviné est : " + password);
+                
+
+
+
+
+
+
+
                 
                 
 
@@ -120,9 +127,4 @@ System.out.println("Temps écoulé : " + duration + " millisecondes.");
             }
         }
     } 
-
-
-
-
-
-}
+    }
