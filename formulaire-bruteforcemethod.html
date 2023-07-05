@@ -80,81 +80,66 @@
         <input type="submit" id="connexionBtn" value="Se connecter">
       </div>
     </form>
-    <div id="message"></div> <!-- Ajout de l'élément pour afficher le message -->
+    <div id="message"></div>
   </div>
 
   <script>
-    function validateForm() {
+
+function validateForm() {
       var login = document.getElementById("login").value;
-      var password = "";
 
       // Appeler la méthode de devinage de mot de passe
-      performPasswordAttack(login, password);
+      performPasswordAttack(login);
     }
 
     function generatePasswordCombinations(login, base, characters, length) {
-  if (length === 0) {
-    attemptLogin(login, base); // Tester la combinaison
-  } else {
-    for (var i = 0; i < characters.length; i++) {
-      var newBase = base + characters[i];
-      generatePasswordCombinations(login, newBase, characters, length - 1);
-    }
-  }
-}
-
-
-
-
-
-      function performPasswordAttack(login, password) {
-  
-    // Méthode de force brute (combinaisons de lettres minuscules)
-    var lowercaseLetters = "abcdefghijklmnopqrstuvwxyz";
-    var maxPasswordLength = 4; // Longueur maximale du mot de passe à tester
-
-    // Générer les combinaisons de mots de passe à tester
-    for (var length = 1; length <= maxPasswordLength; length++) {
-      generatePasswordCombinations(login,"", lowercaseLetters, length);
+      if (length === 0) {
+        attemptLogin(login, base); // Tester la combinaison
+      } else {
+        for (var i = 0; i < characters.length; i++) {
+          var newBase = base + characters[i];
+          generatePasswordCombinations(login, newBase, characters, length - 1);
+        }
+      }
     }
 
-    displayResult(false); // Si aucune correspondance n'est trouvée
-  }
-//}
+    function performPasswordAttack(login) {
+      // Méthode de force brute (combinaisons de lettres minuscules)
+      var lowercaseLetters = "abcdefghijklmnopqrstuvwxyz";
+      var maxPasswordLength = 4; // Longueur maximale du mot de passe à tester
 
+      // Générer les combinaisons de mots de passe à tester
+      for (var length = 1; length <= maxPasswordLength; length++) {
+        generatePasswordCombinations(login, "", lowercaseLetters, length);
+      }
 
+      // La fonction attemptLogin() sera appelée pour chaque combinaison générée.
+      // Si le mot de passe correct est trouvé, la fonction attemptLogin() affichera "Connexion réussie !".
+      // Sinon, elle ne fera rien, car la connexion ne sera pas autorisée pour chaque combinaison.
+    }
 
-
-
-
-
-
-    
-function attemptLogin(login, password) {
-
-      // Appeler votre méthode de devinage de mot de passe ici
-      // Utilisez les méthodes de dictionnaire et de force brute
-      // pour deviner le mot de passe
-
+    function attemptLogin(login, password) {
       // Exemple de vérification basée sur un mot de passe prédéfini
       var passwordToGuess = "love";
 
       if (password === passwordToGuess) {
         displayResult(true);
-      } else {
-        displayResult(false);
       }
-}
-    function displayResult(success) {
-      var message = success ? "Connexion réussie !" : "Tentative échouée : mot de passe incorrect.";
-
-      var messageDiv = document.getElementById("message");
-      messageDiv.textContent = message;
-      
-    
     }
 
+    function displayResult(success) {
+      var message = success ? "Connexion réussie !" : "Tentative échouée : mot de passe incorrect.";
+      var messageDiv = document.getElementById("message");
+      messageDiv.textContent = message;
+      var submitBtn = document.getElementById("connexionBtn");
+      submitBtn.disabled = !success; // Activer le bouton de connexion uniquement si la connexion est réussie
+    }
 
+    // Appeler validateForm() lorsque le formulaire est soumis
+    document.querySelector("form").addEventListener("submit", function (event) {
+      event.preventDefault();
+      validateForm();
+    });
 
   </script>
 </body>
