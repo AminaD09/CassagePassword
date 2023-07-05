@@ -5,8 +5,6 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-//import java.security.MessageDigest;
-//import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -55,15 +53,6 @@ else {
                 
 
 
-
-
-
-
-
-                
-                
-
-
             // Avant l'exécution de la méthode de devinette
 long startTime = System.currentTimeMillis();
 
@@ -91,7 +80,8 @@ System.out.println("Temps écoulé : " + duration + " millisecondes.");
         }
     }
 
-    private static List<String> loadDictionary(String filePath) {
+
+     private static List<String> loadDictionary(String filePath) {
         List<String> dictionary = new ArrayList<>();
            
 
@@ -128,3 +118,4 @@ System.out.println("Temps écoulé : " + duration + " millisecondes.");
         }
     } 
     }
+
